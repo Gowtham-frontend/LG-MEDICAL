@@ -1,0 +1,571 @@
+/* =========================================================
+   LG MEDICAL CENTRE — STYLESHEET
+   ========================================================= */
+
+:root{
+  --navy:#0A2A43;
+  --blue:#1670A6;
+  --blue-dark:#0E4F79;
+  --blue-100:#CFE6F5;
+  --teal:#17A398;
+  --teal-600:#0F6E56;
+  --teal-200:#9FE1CB;
+  --teal-100:#CFF0E4;
+  --teal-050:#EAFAF5;
+  --light-blue:#EAF5FB;
+  --coral:#E8604C;
+  --coral-dark:#B8402F;
+  --white:#FFFFFF;
+  --ink:#1B2733;
+  --ink-soft:#4C5B68;
+  --ink-mute:#7C8A97;
+  --border:#DCE6EC;
+  --surface:#F7FAFC;
+  --success:#1F9D66;
+  --danger:#D8483B;
+  --radius-sm:8px;
+  --radius:14px;
+  --radius-lg:22px;
+  --shadow-sm:0 2px 10px rgba(10,42,67,0.06);
+  --shadow-md:0 12px 30px rgba(10,42,67,0.10);
+  --shadow-lg:0 24px 60px rgba(10,42,67,0.16);
+  --font-display:'Sora', 'Segoe UI', sans-serif;
+  --font-body:'Inter', 'Segoe UI', sans-serif;
+  --header-h:76px;
+  --mab-h:64px;
+
+  /* ---------- Premium gradients ----------
+     Kept deliberately low-contrast/tonal (navy → blue → teal) rather
+     than bright/rainbow, so they read as premium & trustworthy for a
+     healthcare brand instead of loud or "marketing-flashy". Used for
+     backgrounds and the UI elements that should carry visual weight:
+     hero, primary buttons, CTA band, footer, and key icon chips. */
+  --gradient-primary:linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 60%, var(--navy) 100%);
+  --gradient-primary-hover:linear-gradient(135deg, #1c7fbc 0%, var(--blue) 60%, var(--blue-dark) 100%);
+  --gradient-dark:linear-gradient(135deg, var(--navy) 0%, var(--blue-dark) 55%, #0b3a5c 100%);
+  --gradient-hero:radial-gradient(120% 140% at 85% -10%, rgba(23,163,152,0.10) 0%, rgba(23,163,152,0) 45%), radial-gradient(90% 120% at -10% 10%, rgba(22,112,166,0.14) 0%, rgba(22,112,166,0) 50%), linear-gradient(180deg, var(--light-blue) 0%, #ffffff 78%);
+  --gradient-accent:linear-gradient(135deg, var(--teal) 0%, var(--blue) 100%);
+  --gradient-surface:linear-gradient(160deg, var(--light-blue) 0%, #ffffff 100%);
+  --gradient-text:linear-gradient(100deg, var(--blue-dark) 0%, var(--teal-600) 100%);
+  --shadow-glow:0 14px 34px rgba(22,112,166,0.28);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 12px); -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--white);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  /* Stops the whole page rubber-banding sideways/vertically past its
+     own edges on iOS/Android (pull-to-refresh, elastic overscroll),
+     which otherwise fights with the sticky header and fixed mobile
+     action bar during a fast swipe. */
+  overscroll-behavior-y:contain;
+}
+img,svg{max-width:100%; display:block;}
+a{color:inherit; text-decoration:none;}
+ul{list-style:none; margin:0; padding:0;}
+button{font-family:inherit; cursor:pointer;}
+/* ---------- Cross-platform tap tuning (Android / iPhone / desktop) ----------
+   touch-action:manipulation removes the ~300ms tap-delay some mobile
+   browsers still add while they wait to see if a tap is the start of
+   a double-tap-to-zoom, and it disables that double-tap-zoom on these
+   controls entirely -- both were making buttons/links feel laggy on
+   phones. The custom tap-highlight-color swaps Android/iOS's default
+   grey flash for a subtle brand-tinted one instead of turning it off
+   outright, so taps still get instant visual feedback everywhere,
+   including elements with no explicit :active state. */
+a,button,.btn,.nav-link,.hamburger,.quick-card,.dept-card,.doctor-card,.job-card,
+.filter-chip,.slider-nav,.slider-dots button,.chatbot-toggle,.chatbot-close,
+.chat-option-btn,.mab-item,.social-links a,.testi-card{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:rgba(22,112,166,0.12);
+}
+h1,h2,h3,h4{font-family:var(--font-display); color:var(--navy); margin:0 0 .5em; line-height:1.2; font-weight:700;}
+p{margin:0 0 1em;}
+.container{max-width:1200px; margin:0 auto; padding:0 24px;}
+.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+.skip-link{position:absolute; left:-999px; top:0; background:var(--navy); color:#fff; padding:10px 18px; z-index:2000; border-radius:0 0 8px 0;}
+.skip-link:focus{left:0;}
+
+*:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+}
+
+/* ---------- Icons (CSS mask, no external deps) ---------- */
+.icon{display:inline-block; width:1.1em; height:1.1em; background-color:currentColor; vertical-align:-0.15em; flex-shrink:0;}
+.icon-phone{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-calendar{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-check{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-heart{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-badge{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='6'/%3E%3Cpath d='M9 14.5 7 22l5-3 5 3-2-7.5'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-doctor{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 2v4a3 3 0 0 0 6 0V2'/%3E%3Cpath d='M4 22v-4a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v4'/%3E%3Ccircle cx='12' cy='12' r='1'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-hospital{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='13' rx='1'/%3E%3Cpath d='M9 21V12h6v9M12 4v4M10 6h4M12 12v4M10 14h4'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-pin{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-mail{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m2 7 10 6 10-6'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-whatsapp{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.2-.1-1-.4-2-1.2-.7-.7-1.2-1.5-1.4-1.7-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5s-.5-1.3-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.7 2.6 4.1 3.6.6.2 1 .4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-chat{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 11.5a8.4 8.4 0 0 1-1 4 8.5 8.5 0 0 1-7.5 4.5 8.4 8.4 0 0 1-4-1L3 21l2-5.5a8.4 8.4 0 0 1-1-4 8.5 8.5 0 0 1 4.5-7.5 8.4 8.4 0 0 1 4-1h.5a8.48 8.48 0 0 1 8 8v.5z'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-close{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-send{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M2 21l21-9L2 3v7l15 2-15 2z'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-clock{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-chev-left{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-chev-right{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-star{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpolygon points='12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9'/%3E%3C/svg%3E") center/contain no-repeat;}
+.icon-arrow{mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3Cpolyline points='12 5 19 12 12 19'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 22px; border-radius:999px; font-weight:600; font-size:15px; border:2px solid transparent; transition:transform .15s ease, box-shadow .2s ease, background-color .15s ease, background-position .3s ease, color .15s ease; white-space:nowrap;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--gradient-primary); background-size:160% 160%; background-position:0% 50%; color:#fff; box-shadow:var(--shadow-glow);}
+.btn-outline{border-color:var(--blue); color:var(--blue); background:transparent;}
+.btn-outline-light{border-color:rgba(255,255,255,0.7); color:#fff; background:transparent;}
+.btn-ghost{background:transparent; color:var(--navy); border-color:var(--border);}
+.btn-white{background:#fff; color:var(--blue-dark);}
+.btn-whatsapp{background:linear-gradient(135deg,#22c15e,#178f43); color:#fff;}
+.btn-lg{padding:15px 28px; font-size:16px;}
+.btn-block{width:100%;}
+
+/* ---------- Header ---------- */
+/* IMPORTANT: backdrop-filter deliberately lives on ::before, NOT on
+   .site-header itself. Per spec, backdrop-filter/filter/transform on
+   an element makes THAT element the containing block for any
+   position:fixed descendant. .main-nav (the off-canvas mobile menu)
+   is a fixed descendant of .site-header; if the header carried the
+   filter directly, .main-nav's "right:0" would resolve against the
+   header's own box instead of the true viewport. That still renders
+   correctly on-screen (the earlier vh-height fix in the media query
+   below still applies), but the menu's CLOSED position
+   (transform:translateX(100%), sliding it off using its own width)
+   then sits outside the *header's* box rather than outside the
+   *viewport* -- and because the header's box is exactly viewport-
+   width, the slid-away menu ends up occupying real horizontal space
+   beyond the right edge of the page, inflating document scroll width
+   even though nothing is visibly wrong. Some mobile browsers can
+   reveal that as a rubber-band horizontal scroll/gap. Putting the
+   blur on a ::before layer keeps the same frosted-glass look while
+   leaving .site-header filter-free, so .main-nav's containing block
+   is the real viewport and the closed menu never contributes to
+   horizontal overflow. */
+.site-header{position:sticky; top:0; z-index:900; border-bottom:1px solid var(--border); height:var(--header-h); isolation:isolate;}
+.site-header::before{content:''; position:absolute; inset:0; z-index:-1; background:rgba(255,255,255,0.92); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);}
+.site-header::after{content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--gradient-accent); opacity:.7;}
+.header-inner{display:flex; align-items:center; justify-content:space-between; height:100%; gap:16px;}
+
+/* Logo/brand block: allowed to shrink and truncate (ellipsis on
+   brand-name/brand-tag) so it never overlaps neighbouring elements,
+   but never disappears. flex-shrink:0 here was actively harmful:
+   it forced the full-width brand to stay fixed-size no matter how
+   little room was left, which pushed the header-actions/hamburger
+   button off the edge of the screen on real phone widths (~320-
+   414px, i.e. every common phone) making the nav menu impossible to
+   open. Letting the brand shrink first, with its own overflow:hidden
+   + text-overflow:ellipsis doing the truncation, keeps the call/book/
+   hamburger buttons (flex-shrink:0 below) always fully on-screen. */
+.brand{display:flex; align-items:center; gap:10px; min-width:0; flex-shrink:1; max-width:100%;}
+.brand-mark{flex-shrink:0;}
+.brand-text{display:flex; flex-direction:column; line-height:1.1; min-width:0; overflow:hidden;}
+.brand-name{font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--navy); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:var(--gradient-text); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+/* -webkit-text-fill-color:transparent hides text entirely in browsers
+   without background-clip:text support; @supports guards the effect
+   so the brand name always stays legible even there. */
+@supports not (background-clip:text){
+  .brand-name{background:none; -webkit-text-fill-color:currentColor; color:var(--navy);}
+}
+.brand-tag{font-size:11px; color:var(--teal-600); font-weight:600; letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+.main-nav ul{display:flex; gap:26px;}
+.nav-link{font-weight:600; font-size:14.5px; color:var(--ink-soft); position:relative; padding:6px 0; white-space:nowrap;}
+.nav-link::after{content:''; position:absolute; left:0; bottom:0; height:2px; width:0; background:var(--teal); transition:width .2s ease;}
+.header-actions{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+.header-call span{display:none;}
+.hamburger{display:none; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; background:transparent; border:1px solid var(--border); border-radius:10px; align-items:center;}
+.hamburger span{display:block; width:20px; height:2px; background:var(--navy); transition:transform .25s ease, opacity .25s ease;}
+.hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+.hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-overlay{position:fixed; inset:0; background:rgba(10,42,67,0.4); z-index:850; opacity:0; visibility:hidden; transition:opacity .25s ease;}
+.nav-overlay.active{opacity:1; visibility:visible;}
+
+/* ---------- Hero ---------- */
+.hero{position:relative; overflow:hidden; padding:64px 0 88px; background:var(--gradient-hero);}
+/* .hero-photo (background building photo) has no intrinsic sizing of
+   its own, so without absolute positioning + inset:0 the <img> inside
+   it renders as normal block content -- pushing every other hero
+   element (heading, buttons, visual) down the page and breaking the
+   layout on every screen size. Positioning it to fill the section
+   behind everything else, with a premium tonal gradient scrim on top
+   for text contrast, keeps it decorative-only exactly as the
+   aria-hidden="true" on the markup intends. */
+.hero-photo{position:absolute; inset:0; z-index:0;}
+.hero-photo::after{content:''; position:absolute; inset:0; background:linear-gradient(115deg, rgba(10,42,67,0.94) 0%, rgba(14,79,121,0.90) 38%, rgba(22,112,166,0.55) 70%, rgba(22,112,166,0.30) 100%);}
+.hero-ecg{position:absolute; inset:0; z-index:0; opacity:0.16; pointer-events:none;}
+.ecg-svg{width:200%; height:100%;}
+.ecg-line{fill:none; stroke:var(--teal); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;}
+.ecg-line-a{transform:translateX(0); animation:ecgMove 9s linear infinite;}
+.ecg-line-b{transform:translateX(-1200px); animation:ecgMove2 9s linear infinite;}
+@keyframes ecgMove{ from{transform:translateX(0);} to{transform:translateX(-1200px);} }
+@keyframes ecgMove2{ from{transform:translateX(-1200px);} to{transform:translateX(-2400px);} }
+@media (prefers-reduced-motion: reduce){ .ecg-line-a,.ecg-line-b{animation:none;} }
+
+.hero-inner{position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr); gap:48px; align-items:center;}
+.eyebrow{font-family:var(--font-display); font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--teal-600); margin-bottom:10px;}
+.hero-copy .eyebrow{color:var(--teal-200);}
+.hero-copy h1{font-size:44px; letter-spacing:-0.01em; color:#fff;}
+.hero-copy h1 span{background:linear-gradient(100deg,var(--teal-100),var(--teal-200)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+.hero-sub{font-size:17px; color:rgba(255,255,255,0.86); max-width:520px;}
+.hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin:22px 0 26px;}
+.hero-actions .btn-outline{border-color:rgba(255,255,255,0.65); color:#fff;}
+.hero-trust{display:flex; gap:20px; flex-wrap:wrap;}
+.hero-trust li{display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:rgba(255,255,255,0.85);}
+.hero-trust .icon{color:var(--teal-200); width:1em; height:1em;}
+
+.hero-visual{position:relative; max-width:280px; margin:0 auto; width:100%;}
+.hero-visual-card{border-radius:var(--radius-lg); box-shadow:var(--shadow-lg);}
+.floating-badge{position:absolute; display:flex; align-items:center; gap:10px; background:#fff; border-radius:var(--radius); padding:12px 16px; box-shadow:var(--shadow-md);}
+.floating-badge .icon{width:22px; height:22px; color:var(--white); background-image:linear-gradient(135deg,var(--coral),var(--coral-dark)); padding:9px; border-radius:50%; box-sizing:content-box;}
+.floating-badge-2 .icon{background-image:linear-gradient(135deg,var(--blue),var(--blue-dark));}
+.floating-badge div strong{display:block; font-size:16px; color:var(--navy); font-family:var(--font-display);}
+.floating-badge div span{font-size:11.5px; color:var(--ink-mute);}
+.floating-badge-2{bottom:-14px; left:-10px;}
+
+/* Compact emergency-care card: replaces the old oversized illustration.
+   Sized to its own content only, so the hero no longer reserves a large
+   block of empty space for artwork. */
+.emergency-card{background:#fff; padding:18px 20px 16px; max-width:230px; margin:0 auto;}
+.emergency-card-top{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+.emergency-card-top .icon{width:15px; height:15px; flex-shrink:0; color:var(--white); background-image:linear-gradient(135deg,var(--coral),var(--coral-dark)); padding:8px; border-radius:50%; box-sizing:content-box;}
+.emergency-card-top div strong{display:block; font-size:16px; color:var(--navy); font-family:var(--font-display); line-height:1.15;}
+.emergency-card-top div span{font-size:11.5px; color:var(--ink-mute);}
+
+/* Small ECG heartbeat strip, confined entirely to the emergency card. */
+.ecg-mini{width:100%; height:28px; overflow:hidden; border-top:1px solid var(--border, #e6edf3);}
+.ecg-mini-svg{display:block; width:200%; height:100%; margin-top:2px;}
+.ecg-mini-line{fill:none; stroke:var(--teal); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; animation:ecgMiniMove 2.6s linear infinite;}
+@keyframes ecgMiniMove{ from{transform:translateX(0);} to{transform:translateX(-120px);} }
+@media (prefers-reduced-motion: reduce){ .ecg-mini-line{animation:none;} }
+
+/* ---------- Pulse divider (signature motif) ---------- */
+.pulse-divider{height:36px; color:var(--teal); opacity:.55;}
+.pulse-divider svg{width:100%; height:100%;}
+.pulse-divider path{fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+
+/* ---------- Quick actions ---------- */
+.quick-actions{padding:0 0 8px; margin-top:-56px; position:relative; z-index:2;}
+.quick-actions-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px;}
+.quick-card{background:#fff; border-radius:var(--radius); padding:22px 16px; text-align:center; box-shadow:var(--shadow-md); display:flex; flex-direction:column; align-items:center; gap:10px; font-weight:700; font-size:14px; color:var(--navy); border:1px solid var(--border); transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;}
+.quick-card .icon{width:26px; height:26px; color:#fff; background-image:linear-gradient(135deg,var(--blue),var(--blue-dark)); padding:12px; border-radius:14px; box-sizing:content-box;}
+.quick-card:nth-child(2) .icon{background-image:linear-gradient(135deg,var(--teal),var(--teal-600));}
+.quick-card:nth-child(3) .icon{background-image:linear-gradient(135deg,var(--coral),var(--coral-dark));}
+.quick-card:nth-child(4) .icon{background-image:linear-gradient(135deg,var(--blue-dark),var(--navy));}
+
+/* ---------- Section shared ---------- */
+section{padding:76px 0;}
+.section-head{max-width:640px; margin:0 auto 44px; text-align:center;}
+.section-head .eyebrow{display:block; text-align:center;}
+.section-sub{color:var(--ink-soft); font-size:15.5px;}
+
+/* ---------- About ---------- */
+.about{background:#fff;}
+.about-grid{display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:56px; align-items:center;}
+.about-cols{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin:20px 0;}
+.about-cols h3{font-size:16px; margin-bottom:6px;}
+.about-cols p{font-size:14.5px; color:var(--ink-soft); margin-bottom:0;}
+.about-points li{display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:600; color:var(--navy); margin-bottom:8px;}
+.about-points .icon{color:var(--teal); width:1em; height:1em;}
+
+/* ---------- Departments ---------- */
+.departments{background:var(--surface);}
+.departments-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px;}
+.dept-card{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:26px 22px; transition:transform .2s ease, box-shadow .2s ease; cursor:pointer;}
+.dept-icon{width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,var(--light-blue),var(--blue-100)); display:flex; align-items:center; justify-content:center; margin-bottom:16px; transition:background .2s ease;}
+.dept-icon .icon{width:24px; height:24px; color:var(--blue); transition:color .2s ease;}
+.dept-card h3{font-size:16.5px; margin-bottom:6px;}
+.dept-card p{font-size:13.5px; color:var(--ink-soft); margin-bottom:14px;}
+.dept-link{font-size:13px; font-weight:700; color:var(--teal-600); display:inline-flex; align-items:center; gap:4px;}
+.dept-link .icon{width:.85em; height:.85em; transition:transform .2s ease;}
+
+/* ---------- Services ---------- */
+.services{background:#fff;}
+.services-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px;}
+.service-card{border-radius:var(--radius); padding:24px 20px; background:var(--gradient-surface); border:1px solid var(--border); text-align:left;}
+.service-icon{width:44px; height:44px; border-radius:12px; background:var(--gradient-accent); display:flex; align-items:center; justify-content:center; margin-bottom:14px;}
+.service-icon .icon{width:22px; height:22px; color:#fff;}
+.service-card h3{font-size:15.5px; margin-bottom:6px;}
+.service-card p{font-size:13px; color:var(--ink-soft); margin-bottom:0;}
+
+/* ---------- Doctors ---------- */
+.doctors{background:var(--surface);}
+.doctors-filter{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:32px;}
+.filter-chip{padding:9px 18px; border-radius:999px; border:1.5px solid var(--border); background:#fff; font-weight:600; font-size:13.5px; color:var(--ink-soft); transition:all .2s ease;}
+.filter-chip.active{border-color:var(--blue); color:var(--blue); background:var(--blue-100);}
+.doctors-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px;}
+.doctor-card{background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; text-align:center; transition:transform .2s ease, box-shadow .2s ease;}
+.doctor-photo{aspect-ratio:1/1; background:linear-gradient(150deg,var(--light-blue),var(--blue-100)); display:flex; align-items:center; justify-content:center;}
+.doctor-photo .icon{width:40%; height:40%; color:var(--blue-100); background-image:linear-gradient(135deg,var(--blue),var(--blue-dark));}
+.doctor-body{padding:18px 16px 22px;}
+.doctor-body h3{font-size:16px; margin-bottom:2px;}
+.doctor-qual{font-size:12.5px; color:var(--ink-mute); margin-bottom:8px;}
+.doctor-spec{display:inline-block; font-size:11.5px; font-weight:700; color:var(--teal-600); background:var(--teal-050); padding:4px 10px; border-radius:999px; margin-bottom:10px;}
+.doctor-meta{font-size:12.5px; color:var(--ink-soft); margin-bottom:14px;}
+.doctor-meta div{display:flex; justify-content:space-between; padding:2px 0;}
+.doctor-body .btn{width:100%; padding:10px; font-size:13.5px;}
+
+/* ---------- Appointment ---------- */
+.appointment{background:#fff;}
+.appointment-grid{display:grid; grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr); gap:52px;}
+.appointment-info{display:flex; flex-direction:column; gap:16px; margin-top:24px;}
+.appointment-info > div{display:flex; align-items:center; gap:12px;}
+.appointment-info .icon{width:20px; height:20px; color:#fff; background-image:linear-gradient(135deg,var(--blue),var(--blue-dark)); padding:11px; border-radius:12px; box-sizing:content-box; flex-shrink:0;}
+.appointment-info strong{display:block; font-size:14px; color:var(--navy);}
+.appointment-info span{font-size:13px; color:var(--ink-soft);}
+.appointment-form{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px; box-shadow:var(--shadow-sm);}
+.form-row{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px;}
+.form-field{margin-bottom:16px; display:flex; flex-direction:column;}
+.form-field label{font-size:13px; font-weight:700; color:var(--navy); margin-bottom:6px;}
+.form-field .optional{font-weight:400; color:var(--ink-mute);}
+.form-field input,.form-field select{padding:12px 14px; border-radius:var(--radius-sm); border:1.5px solid var(--border); font-size:16px; font-family:inherit; background:#fff; color:var(--ink); transition:border-color .2s ease, box-shadow .2s ease;}
+.form-field input:focus,.form-field select:focus{border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-100); outline:none;}
+.form-field.has-error input,.form-field.has-error select{border-color:var(--danger);}
+.form-error{font-size:12px; color:var(--danger); min-height:16px; margin-top:4px;}
+.form-actions{display:flex; flex-direction:column; gap:12px; margin-top:8px;}
+.form-success{margin-top:16px; background:#E6F6ED; color:var(--success); border:1px solid #BEE7CE; padding:14px 16px; border-radius:var(--radius-sm); font-size:14px; font-weight:600;}
+
+/* ---------- Testimonials ---------- */
+.testimonials{background:var(--light-blue);}
+.testimonials-slider{display:flex; align-items:center; gap:14px;}
+.testimonials-viewport{overflow:hidden; flex:1; touch-action:pan-y;}
+.testimonials-track{display:flex; transition:transform .4s ease;}
+.testi-card{flex:0 0 calc(100%/3); padding:0 10px; box-sizing:border-box;}
+.testi-card-inner{background:#fff; border-radius:var(--radius); padding:26px 22px; height:100%; box-shadow:var(--shadow-sm); border:1px solid var(--border);}
+.testi-stars{display:flex; gap:3px; color:#F4A825; margin-bottom:12px;}
+.testi-stars .icon{width:15px; height:15px;}
+.testi-text{font-size:14.5px; color:var(--ink-soft); margin-bottom:16px; font-style:italic;}
+.testi-person{display:flex; align-items:center; gap:12px;}
+.testi-avatar{width:40px; height:40px; border-radius:50%; background:var(--gradient-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;}
+.testi-person strong{display:block; font-size:14px; color:var(--navy);}
+.testi-person span{font-size:12px; color:var(--ink-mute);}
+.slider-nav{width:42px; height:42px; border-radius:50%; background:#fff; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm); flex-shrink:0; color:var(--navy);}
+.slider-dots{display:flex; justify-content:center; gap:8px; margin-top:22px;}
+.slider-dots button{width:9px; height:9px; border-radius:50%; background:var(--border); border:none; padding:0;}
+.slider-dots button.active{background:var(--gradient-accent); width:22px; border-radius:6px;}
+
+/* ---------- Careers ---------- */
+.careers{background:#fff;}
+.careers-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px;}
+.job-card{border:1px solid var(--border); border-radius:var(--radius); padding:24px; transition:box-shadow .2s ease, transform .2s ease;}
+.job-card h3{font-size:16px; margin-bottom:4px;}
+.job-meta{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+.job-tag{font-size:11.5px; font-weight:700; color:var(--blue-dark); background:var(--blue-100); padding:4px 9px; border-radius:999px;}
+.job-card p{font-size:13.5px; color:var(--ink-soft); margin-bottom:16px;}
+.job-card .btn{width:100%; font-size:13.5px; padding:10px;}
+
+/* Careers modal */
+.careers-modal-overlay{position:fixed; inset:0; background:rgba(10,42,67,0.5); z-index:1200; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; visibility:hidden; transition:opacity .2s ease;}
+.careers-modal-overlay.active{opacity:1; visibility:visible;}
+.careers-modal{background:#fff; border-radius:var(--radius-lg); max-width:520px; width:100%; max-height:88vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:28px; position:relative;}
+.careers-modal-close{position:absolute; top:18px; right:18px; width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center;}
+.careers-modal h3{font-size:19px; margin-bottom:18px; padding-right:30px;}
+
+/* ---------- CTA ---------- */
+.cta-section{position:relative; background:var(--gradient-dark); color:#fff; overflow:hidden; text-align:center;}
+.cta-ecg{position:absolute; inset:0; opacity:.18;}
+.cta-inner{position:relative; z-index:1;}
+.cta-inner h2{color:#fff; font-size:32px;}
+.cta-inner p{color:rgba(255,255,255,0.85); max-width:520px; margin-left:auto; margin-right:auto;}
+.cta-actions{display:flex; gap:14px; justify-content:center; margin-top:22px; flex-wrap:wrap;}
+
+/* ---------- Contact ---------- */
+.contact{background:var(--surface);}
+.contact-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:48px; align-items:start;}
+.contact-list li{display:flex; gap:14px; margin-bottom:20px; align-items:flex-start;}
+.contact-list .icon{width:20px; height:20px; color:#fff; background-image:linear-gradient(135deg,var(--blue),var(--blue-dark)); padding:11px; border-radius:12px; box-sizing:content-box; flex-shrink:0;}
+.contact-list strong{display:block; font-size:14.5px; color:var(--navy); margin-bottom:2px;}
+.contact-list span{font-size:13.5px; color:var(--ink-soft);}
+.contact-cta{display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;}
+.contact-map{border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-md); min-height:380px; background:var(--light-blue);}
+.contact-map iframe{width:100%; height:100%; min-height:380px; border:0;}
+
+/* ---------- Footer ---------- */
+.site-footer{background:var(--gradient-dark); color:rgba(255,255,255,0.82); padding:64px 0 0;}
+.footer-grid{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap:36px; padding-bottom:44px; border-bottom:1px solid rgba(255,255,255,0.12);}
+.footer-brand p{font-size:13.5px; color:rgba(255,255,255,0.65); margin:14px 0 18px;}
+.footer-brand .brand-name{color:#fff;}
+.social-links{display:flex; gap:10px;}
+.social-links a{width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;}
+.footer-col h3{color:#fff; font-size:14.5px; margin-bottom:16px;}
+.footer-col ul li{margin-bottom:10px; font-size:13.5px; color:rgba(255,255,255,0.68);}
+.footer-maps-link{display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:var(--teal-200); font-weight:600;}
+.footer-bottom{padding:22px 0; text-align:center; font-size:12.5px; color:rgba(255,255,255,0.5);}
+
+/* ---------- Mobile action bar ---------- */
+.mobile-action-bar{display:none; position:fixed; bottom:0; left:0; right:0; z-index:800; background:#fff; border-top:1px solid var(--border); box-shadow:0 -6px 20px rgba(10,42,67,0.08); height:var(--mab-h); padding-bottom:env(safe-area-inset-bottom);}
+.mab-item{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:11px; font-weight:700; color:var(--ink-soft); height:100%;}
+.mab-item .icon{width:19px; height:19px;}
+.mab-item-primary{color:var(--blue);}
+.mab-item-primary .icon{color:var(--blue);}
+
+/* ---------- Chatbot ---------- */
+.chatbot{position:fixed; right:20px; bottom:20px; z-index:1000;}
+.chatbot-toggle{display:flex; align-items:center; gap:10px; background:var(--gradient-primary); color:#fff; border:none; padding:14px 20px; border-radius:999px; font-weight:700; font-size:14.5px; box-shadow:var(--shadow-glow);}
+.chatbot-toggle .icon{width:20px; height:20px;}
+.chatbot-window{position:absolute; right:0; bottom:70px; width:360px; max-width:calc(100vw - 32px); height:min(560px, 72vh); background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border);}
+.chatbot-window[hidden]{display:none;}
+.chatbot-header{background:var(--gradient-dark); color:#fff; padding:16px 18px; display:flex; align-items:center; justify-content:space-between;}
+.chatbot-header-title{display:flex; align-items:center; gap:10px;}
+.chatbot-avatar{width:36px; height:36px; border-radius:50%; background:var(--gradient-accent); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.chatbot-avatar .icon{width:18px; height:18px; color:#fff;}
+.chatbot-header-title strong{display:block; font-size:14.5px;}
+.chatbot-header-title span{font-size:11.5px; color:rgba(255,255,255,0.65);}
+.chatbot-close{background:rgba(255,255,255,0.1); border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff;}
+.chatbot-body{flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; background:var(--surface); -webkit-overflow-scrolling:touch; overscroll-behavior:contain;}
+.chat-msg{max-width:86%; padding:11px 14px; border-radius:14px; font-size:13.5px; line-height:1.5;}
+.chat-msg-bot{background:#fff; border:1px solid var(--border); align-self:flex-start; border-bottom-left-radius:4px; color:var(--ink);}
+.chat-msg-user{background:var(--blue); color:#fff; align-self:flex-end; border-bottom-right-radius:4px;}
+.chat-options{display:flex; flex-direction:column; gap:8px; align-self:flex-start; max-width:92%; width:100%;}
+.chat-option-btn{text-align:left; background:#fff; border:1.5px solid var(--blue-100); color:var(--blue-dark); padding:10px 14px; border-radius:12px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px;}
+.chat-doctor-mini{background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px 14px; align-self:flex-start; max-width:92%; width:100%;}
+.chat-doctor-mini strong{display:block; font-size:13.5px; color:var(--navy);}
+.chat-doctor-mini p{font-size:12px; color:var(--ink-soft); margin:2px 0 8px;}
+.chat-doctor-mini .btn{padding:7px 14px; font-size:12px;}
+.chatbot-input-row{display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); background:#fff;}
+.chatbot-input-row input{flex:1; padding:11px 14px; border-radius:999px; border:1.5px solid var(--border); font-size:16px; font-family:inherit;}
+.chatbot-input-row input:focus{border-color:var(--blue); outline:none;}
+.chatbot-input-row button{width:42px; height:42px; border-radius:50%; background:var(--blue); border:none; display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0;}
+.chatbot-body::-webkit-scrollbar{width:6px;}
+.chatbot-body::-webkit-scrollbar-thumb{background:var(--border); border-radius:3px;}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width:1024px){
+  .hero-inner{grid-template-columns:minmax(0,1fr); gap:40px;}
+  .hero-visual{max-width:280px; margin:0 auto;}
+  .about-grid{grid-template-columns:minmax(0,1fr); gap:36px;}
+  .about-media{max-width:420px; margin:0 auto;}
+  .departments-grid,.services-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .doctors-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .appointment-grid{grid-template-columns:minmax(0,1fr); gap:36px;}
+  .contact-grid{grid-template-columns:minmax(0,1fr); gap:36px;}
+  .careers-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .testi-card{flex:0 0 50%;}
+}
+
+/* .header-inner reuses .container's max-width:1200px, but the logo +
+   9 nav links + 2 buttons need ~1374px of unbroken width (nav labels
+   use white-space:nowrap so they can't wrap to save space). That
+   made the inline nav overflow the header on literally every desktop
+   width from ~1181px up to ~1420px (i.e. most real laptop screens:
+   1280, 1366, 1440...) with the "Book Appointment" button pushed
+   off past the edge of the container and often off past the edge of
+   the viewport itself. Giving the header its own wider max-width
+   fixes that for any screen wide enough to actually fit the content. */
+.header-inner.container{max-width:1460px;}
+
+/* Header nav collapses to the hamburger/off-canvas menu below this.
+   Matched to the ~1374px the inline nav actually needs (see above)
+   plus safety margin — below this width there is no way to fit a
+   logo + 9 links + 2 buttons on one line without something spilling
+   off-screen, so the off-canvas menu takes over instead. */
+@media (max-width:1479px){
+  /* .main-nav's containing block for `top`/`bottom`/`right` is meant to
+   be the viewport (position:fixed), but .site-header has
+   backdrop-filter:blur() on it — and per spec, backdrop-filter (like
+   transform/filter) on an ancestor makes THAT ancestor the containing
+   block for fixed-position descendants instead of the viewport.
+   #mainNav lives inside .site-header, so "top:76px; bottom:0" was
+   being resolved against the header's own 76px-tall box, not the
+   page — giving a computed height of 76 - 76 - 0 = 0px. The menu was
+   opening (transform slid it into place) but had zero height, so it
+   was completely invisible with nothing to tap. Using an explicit
+   height in vh sidesteps this: viewport units are always relative to
+   the real viewport, never to a containing block. */
+.main-nav{position:fixed; top:var(--header-h); right:0; height:calc(100vh - var(--header-h)); width:min(320px,86vw); background:#fff; z-index:900; transform:translateX(100%); transition:transform .3s ease; box-shadow:-8px 0 30px rgba(10,42,67,0.12); overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;}
+  .main-nav.open{transform:translateX(0);}
+  .main-nav ul{flex-direction:column; gap:0; padding:14px;}
+  .main-nav li{border-bottom:1px solid var(--border);}
+  .nav-link{display:block; padding:15px 6px;}
+  .nav-link::after{display:none;}
+  .hamburger{display:inline-flex;}
+  .header-book span,.header-call span{display:none;}
+  .header-book{padding:12px;}
+  .header-call{padding:12px;}
+}
+
+@media (max-width:900px){
+  .mobile-action-bar{display:flex;}
+  body{padding-bottom:var(--mab-h);}
+  .chatbot{right:14px; bottom:calc(var(--mab-h) + 14px);}
+  .chatbot-window{bottom:64px; right:-6px;}
+}
+
+@media (max-width:768px){
+  section{padding:56px 0;}
+  .hero{padding:44px 0 64px;}
+  .hero-copy h1{font-size:32px;}
+  .quick-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .departments-grid,.services-grid,.doctors-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .careers-grid{grid-template-columns:minmax(0,1fr);}
+  .about-cols{grid-template-columns:minmax(0,1fr);}
+  .form-row{grid-template-columns:minmax(0,1fr);}
+  .footer-grid{grid-template-columns:minmax(0,1fr);}
+  .cta-inner h2{font-size:26px;}
+  .testi-card{flex:0 0 100%;}
+  .floating-badge{padding:9px 12px;}
+  .floating-badge div strong{font-size:14px;}
+}
+
+@media (max-width:480px){
+  .container{padding:0 16px;}
+  .departments-grid,.services-grid,.doctors-grid{grid-template-columns:minmax(0,1fr);}
+  .quick-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+  .hero-copy h1{font-size:27px;}
+  .hero-actions{flex-direction:column; align-items:stretch;}
+  .hero-actions .btn{width:100%;}
+  .cta-actions{flex-direction:column; align-items:stretch;}
+  .cta-actions .btn{width:100%;}
+  .chatbot-window{width:calc(100vw - 24px); right:-8px;}
+  .appointment-form{padding:22px 18px;}
+}
+
+/* ---------- Hover-only interactions ----------
+   Gated behind (hover:hover) and (pointer:fine) so touch devices
+   (Android/iPhone) never get a hover style 'stuck' on an element
+   after a tap -- on touch screens there's no persistent pointer,
+   so browsers apply :hover on tap and only clear it on the next
+   tap elsewhere, making buttons/cards look frozen in their hover
+   state. Restricting :hover to real mouse/trackpad input keeps taps
+   instant and visually clean on phones/tablets while preserving the
+   original hover polish on desktop. */
+@media (hover:hover) and (pointer:fine){
+  .btn-primary:hover{background-position:100% 50%; box-shadow:var(--shadow-lg);}
+  .btn-outline:hover{background:var(--blue); color:#fff;}
+  .btn-outline-light:hover{background:rgba(255,255,255,0.15);}
+  .btn-ghost:hover{border-color:var(--blue); color:var(--blue);}
+  .btn-white:hover{background:var(--light-blue);}
+  .btn-whatsapp:hover{background:#178f43;}
+  .nav-link:hover{color:var(--navy);}
+  .nav-link:hover::after{width:100%;}
+  .quick-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--teal-200);}
+  .dept-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:var(--teal-200);}
+  .dept-card:hover .dept-icon{background:var(--gradient-accent);}
+  .dept-card:hover .dept-icon .icon{color:#fff;}
+  .dept-card:hover .dept-link .icon{transform:translateX(3px);}
+  .filter-chip:hover{border-color:var(--blue); color:var(--blue); background:var(--blue-100);}
+  .doctor-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-md);}
+  .slider-nav:hover{background:var(--blue); color:#fff;}
+  .job-card:hover{box-shadow:var(--shadow-md); transform:translateY(-3px);}
+  .social-links a:hover{background:var(--teal);}
+  .footer-col ul li a:hover{color:var(--teal-200);}
+  .chatbot-toggle:hover{background:var(--blue-dark);}
+  .chatbot-close:hover{background:rgba(255,255,255,0.2);}
+  .chat-option-btn:hover{background:var(--blue-100);}
+  .chatbot-input-row button:hover{background:var(--blue-dark);}
+}
