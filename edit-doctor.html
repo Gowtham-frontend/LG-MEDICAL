@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Doctor - LG Medical</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>LG Medical</h1>
+                <p>Edit Doctor</p>
+            </div>
+
+            <button onclick="window.location.href='dashboard.html'">
+                Back
+            </button>
+        </header>
+
+        <main>
+
+            <h2>Edit Doctor</h2>
+
+            <div id="message"></div>
+
+            <form id="editDoctorForm">
+
+                <input type="hidden" id="doctorId">
+
+                <label>Name</label>
+                <input type="text" id="name" required>
+
+                <label>Designation</label>
+                <input type="text" id="designation">
+
+                <label>Department</label>
+                <input type="text" id="department" required>
+
+                <label>Qualification</label>
+                <input type="text" id="qualification">
+
+                <label>Experience</label>
+                <input type="text" id="experience_years">
+
+                <label>OP Days</label>
+                <input type="text" id="op_days">
+
+                <label>OP Time</label>
+                <input type="text" id="op_time">
+
+                <label>Notes</label>
+                <textarea id="notes"></textarea>
+
+                <div>
+                    <button type="submit">
+                        Save Changes
+                    </button>
+
+                    <button type="button"
+                        onclick="window.location.href='dashboard.html'">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </main>
+
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Edit Doctor JS -->
+    <script src="edit-doctor.js"></script>
+
+</body>
+
+</html>
