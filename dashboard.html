@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LG Medical - Admin Dashboard</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+
+            <div>
+                <h1>LG Medical</h1>
+                <p>Admin Dashboard</p>
+            </div>
+
+            <button id="logoutBtn">
+                Logout
+            </button>
+
+        </header>
+
+
+        <!-- Main Content -->
+        <main>
+
+            <div class="dashboard-title">
+
+                <div class="dashboard-stats">
+
+                    <div class="stat-card">
+                        <h3 id="totalDoctors">0</h3>
+                        <p>Total Doctors</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3 id="totalDepartments">0</h3>
+                        <p>Departments</p>
+                    </div>
+
+                </div>
+
+
+                <div>
+                    <h2>Doctors</h2>
+
+                    <p>
+                        Manage doctor information
+                    </p>
+                </div>
+
+
+                <button id="addDoctorBtn">
+                    + Add Doctor
+                </button>
+
+            </div>
+
+
+            <!-- Message -->
+            <div id="message"></div>
+
+            <div class="doctor-search">
+
+                <input
+                    type="text"
+                    id="doctorSearch"
+                    placeholder="Search doctor by name..."
+                >
+
+            </div>
+
+
+            <!-- Doctors Table -->
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Designation</th>
+
+                            <th>Department</th>
+
+                            <th>Qualification</th>
+
+                            <th>Experience</th>
+
+                            <th>OP Days</th>
+
+                            <th>OP Time</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="doctorsTableBody">
+
+                        <tr>
+
+                            <td colspan="8">
+                                Loading doctors...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ==========================================
+                 APPOINTMENTS SECTION
+            ========================================== -->
+
+            <section class="appointments-section">
+
+                <div class="dashboard-title">
+
+                    <div>
+
+                        <h2>Appointments</h2>
+
+                        <p>
+                            Manage patient appointment requests
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Appointment Search -->
+                <div class="appointment-search">
+
+                    <input
+                        type="text"
+                        id="appointmentSearch"
+                        placeholder="Search patient, doctor or department..."
+                    >
+
+                </div>
+
+
+                <!-- Appointments Table -->
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Patient Name</th>
+
+                                <th>Phone</th>
+
+                                <th>Email</th>
+
+                                <th>Doctor</th>
+
+                                <th>Department</th>
+
+                                <th>Date</th>
+
+                                <th>Time</th>
+
+                                <th>Message</th>
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="appointmentsTableBody">
+
+                            <tr>
+
+                                <td colspan="10">
+                                    Loading appointments...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- Supabase -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+
+    <!-- Dashboard JavaScript -->
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>
